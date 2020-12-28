@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+	  <title>マリオサンシャインビンゴ</title>
+  </head>
+  <body>
+    <div id="maintable" align="center"></div>
+	 <div align="center">
+		<img src="minus.png" width="20px" onclick="chgSize(-2)"/>
+		<span id="sizetext";><font size="5">5x5</font></span>
+		<img src="plus.png" width="20px" onclick="chgSize(2)"/> 
+		<div><input type="button" value="作成" onclick="makeBingo();"/></div>
+	 </div>
+	 <div id="checklist"></div>
+	 <script type="text/javascript" src="bingo.js"></script>
+  </body>
+</html>
