@@ -20,6 +20,8 @@ var colors = [[0,0,0,0,0,0,0,0],
 				  [0,0,0,0,0,0,0,0],
 				  [0,0,0,0,0,0,0,0],
 				  [0,0,0,0,0,0,0,0]];
+var rednum = 0;
+var bluenum = 0;
 var table = document.createElement('table');
 table.border = "1px";
 table.style = "border-collapse: collapse; font-size: 10px";
@@ -164,17 +166,21 @@ function clickTable(obj,i,j)
 {
 	row = obj.id.charAt(2);
 	col = obj.id.charAt(3);
-	console.log(colors[row][col])
 	if(colors[row][col]==0)
 	{
 		obj.style.background = "#ffeeee";
 		colors[row][col] = 1;
+		rednum += 1;
 	} else if(colors[row][col]==1) {
 		obj.style.background = "#eeeeff";
 		colors[row][col] = 2;
+		rednum -= 1;
+		bluenum += 1;
 	} else if(colors[row][col]==2) {
 		obj.style.background = "#ffffff";
 		colors[row][col] = 0;
+		bluenum -= 1;
 	}
-	console.log(colors[row][col])
+	document.getElementById('rednum').innerHTML = "" + rednum;
+	document.getElementById('bluenum').innerHTML = "" + bluenum;
 }
