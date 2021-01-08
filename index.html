@@ -13,7 +13,39 @@
 		<img src="plus.png" width="20px" onclick="chgSize(1)"/> 
 		<div><input type="button" value="作成" onclick="makeBingo();"/></div>
 	 </div>
+	 <div onclick="obj=document.getElementById('open').style; obj.display=(obj.display=='none')?'block':'none';">
+	 <a style="cursor:pointer;"><font color="#4444FF">ルール説明(クリックで展開)</font></a>
+    </div>
+    <div id="open" style="display:none;clear:both;font-size:10px">
+		 ・以下のどちらかのセーブデータを選択し、スタートを押すところでビンゴ開始。<br>
+		 　- レースファイル(裁判ムービー終了直後にセーブしたデータ)<br>
+		 　- クリア済みファイル(クッパを倒した後のデータ)<br>
+		 ・相手より先にミッションを達成するとそのマスを自分の色にすることができる。<br>
+		 ・自分の色のマスが1列揃うか、全マスの半数以上獲得したら勝ち。
+		 <div onclick="obj=document.getElementById('open2').style; obj.display=(obj.display=='none')?'block':'none';">
+	 	 <a style="cursor:pointer;"><font color="#4444FF">各ミッションの判定基準(クリックで展開)</font></a>
+    	 </div>
+		 <div id="open2" style="display:none;clear:both;">
+		 ・「○○をとる」は○○に触れた瞬間に達成<br>
+		 ・「○○を倒す」は最後の攻撃が当たった瞬間に達成<br>
+		 ・「体力満タンで」は一度ダメージを受けても、達成時までに回復してあればOK<br>
+		 ・「合計でシャイン○枚をとる」は開始前に取ってあるエアポートの1枚も含める。<br>
+		 </div>
+    </div>
+	 <br>
+	 <div><input type="button" value="リスト切り替え" onclick="changeList();"/></div>
 	 <div id="checklist"></div>
 	 <script type="text/javascript" src="bingo.js"></script>
+	 <br>
+	 <div style="font-size:10px">
+		 ミッションの内容は随時更新していきます。<br>
+		 ご提案がある方は<a href="https://twitter.com/naosan_RTA">なおさん</a>までご連絡ください。<br>
+		 ミッションは以下のような基準で選んでいます。<br>
+		 ・その一瞬だけを見て達成したかどうかを判断できる(ダメな例：○箇所のヒミツステージをクリアする)<br>
+		 ・解釈が人によって分かれたり、基準が曖昧だったりしない(ダメな例：○○を正規ルートでクリアする)<br>
+		 ・すべてのバージョンで達成できる(ダメな例：フルーツ保存をする)<br>
+		 ・ストーリーが進行しても挑戦できる(ダメな例：ハニースキップをする)<br>
+		 ・他のミッションと似すぎない(ダメな例:ヨッシーに乗る&シレナを解放する)<br>
+	 </div>
   </body>
 </html>

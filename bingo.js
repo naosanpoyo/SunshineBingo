@@ -1,8 +1,16 @@
-var numlist = [];
-var maxlevel = 8;
-var missionlist = getCSV("mission.csv");
+var rule = "1"
+var numlist1 = [];
+var numlist2 = [];
+var titlelist1 = [];
+var titlelist2 = [];
+var maxlevel1 = 8;
+var maxlevel2 = 11;
+url1 = "mission1.csv";
+url2 = "mission2.csv"
+var missionlist1, missionlist2
+getCSV();
 var checkedlist = [];
-makeCheckList();
+makeCheckList(rule);
 var size = 5;
 var bingo = [[" ","1","2","3","4","5","6","7"],
 				 ["A"," "," "," "," "," "," "," "],
@@ -25,50 +33,56 @@ var bluenum = 0;
 var table = document.createElement('table');
 table.border = "1px";
 table.style = "border-collapse: collapse; font-size: 10px";
-var tcount = 0;
 makeTable();
 
-
 function getCSV(url){
-  //CSVファイルを文字列で取得。
   var txt = new XMLHttpRequest();
-  txt.open('get', url, false);
+  txt.open('get', url1, false);
   txt.send();
-
-  //改行ごとに配列化
   var arr = txt.responseText.split('\n');
-  //console.log(arr)
-  // レベルわけ
   for (var i=0;i<arr.length;)
   {
 	  str = arr[i];
 	  if(str.charAt(0)=="#")
 	  {
-		  numlist.push(i);
+		  numlist1.push(i);
+		  titlelist1.push(arr[i]);
 		  arr.splice(i,1);
 	  }else{
 		  i++;
 	  }
   }
-  numlist.push(arr.length-1);
-  //1次元配列を2次元配列に変換
+  numlist1.push(arr.length-1);
   var res = [];
   for(var i = 0; i < arr.length; i++){
-    //空白行が出てきた時点で終了
     if(arr[i] == '') break;
-
-    //","ごとに配列化
     res[i] = arr[i].split(',');
-
-    /*for(var i2 = 0; i2 < res[i].length; i2++){
-      //数字の場合は「"」を削除
-      if(res[i][i2].match(/\-?\d+(.\d+)?(e[\+\-]d+)?/)){
-        res[i][i2] = parseFloat(res[i][i2].replace('"', ''));
-      }
-    }*/
   }
-
-  return res;
+  missionlist1 = res;
+  
+  var txt = new XMLHttpRequest();
+  txt.open('get', url2, false);
+  txt.send();
+  var arr = txt.responseText.split('\n');
+  for (var i=0;i<arr.length;)
+  {
+	  str = arr[i];
+	  if(str.charAt(0)=="#")
+	  {
+		  numlist2.push(i);
+		  titlelist2.push(arr[i]);
+		  arr.splice(i,1);
+	  }else{
+		  i++;
+	  }
+  }
+  numlist2.push(arr.length-1);
+  var res = [];
+  for(var i = 0; i < arr.length; i++){
+    if(arr[i] == '') break;
+    res[i] = arr[i].split(',');
+  }
+  missionlist2 = res;
 }
 
 function makeTable()
@@ -83,7 +97,7 @@ function makeTable()
 	  	for (var j = 0; j < size+1; j++) {
 			var td = document.createElement('td');
 		  	td.textContent = bingo[i][j];
-		  	if(i==0){td.height = "30px";}else{td.height = "100px";}
+		  	if(i==0){td.height = "30px";}else{td.height = "80px";}
 		  	if(j==0){td.width = "30px";}else{td.width = "100px";}
 		  	td.align = "center";
 			td.id = "td" + i + j;
@@ -100,12 +114,36 @@ function makeTable()
 function makeCheckList()
 {
 	str = "";
-	for(var lv=1;lv<=maxlevel;lv++)
+	if(rule=="1")
 	{
-		str += "<br><b>Level " + lv + "</b><br><input type='button' value='すべてチェック' onclick='checkAll(" + lv + ",true);'/> <input type='button' value='すべて解除' onclick='checkAll(" + lv + ",false);'/><br>";
-		for(var i=numlist[lv-1];i<numlist[lv];i++)
+		str += "現在のリスト：レースファイル用<br>";
+		for(var lv=1;lv<=maxlevel1;lv++)
 		{
-			str += "<label><input type='checkbox' id='checkbox" + i + "' checked/>" + missionlist[i][0] + "</label><br>";
+			str += "<br><b>" + titlelist1[lv-1].slice(2) + "</b><br><input type='button' value='すべてチェック' onclick='checkAll(" + lv + ",true);'/> <input type='button' value='すべて解除' onclick='checkAll(" + lv + ",false);'/><br>";
+			for(var i=numlist1[lv-1];i<numlist1[lv];i++)
+			{
+				if(lv<=3)
+				{
+					str += "<label><input type='checkbox' id='checkbox" + i + "' checked/>" + missionlist1[i][0] + "</label><br>";
+				} else {
+					str += "<label><input type='checkbox' id='checkbox" + i + "'/>" + missionlist1[i][0] + "</label><br>";
+				}
+			}
+		}
+	} else {
+		str += "現在のリスト：クリア済みファイル用<br>"
+		for(var lv=1;lv<=maxlevel2;lv++)
+		{
+			str += "<br><b>" + titlelist2[lv-1].slice(2) + "</b><br><input type='button' value='すべてチェック' onclick='checkAll(" + lv + ",true);'/> <input type='button' value='すべて解除' onclick='checkAll(" + lv + ",false);'/><br>";
+			for(var i=numlist2[lv-1];i<numlist2[lv];i++)
+			{
+				if(lv<=9)
+				{
+					str += "<label><input type='checkbox' id='checkbox" + i + "' checked/>" + missionlist2[i][0] + "</label><br>";
+				} else {
+					str += "<label><input type='checkbox' id='checkbox" + i + "'/>" + missionlist2[i][0] + "</label><br>";
+				}
+			}
 		}
 	}
 	document.getElementById('checklist').innerHTML = str;
@@ -113,9 +151,17 @@ function makeCheckList()
 
 function checkAll(lv,tf)
 {
-	for(var i=numlist[lv-1];i<numlist[lv];i++)
+	if(rule=="1")
 	{
-		document.getElementById("checkbox" + i).checked = tf;
+		for(var i=numlist1[lv-1];i<numlist1[lv];i++)
+		{
+			document.getElementById("checkbox" + i).checked = tf;
+		}
+	} else {
+		for(var i=numlist2[lv-1];i<numlist2[lv];i++)
+		{
+			document.getElementById("checkbox" + i).checked = tf;
+		}
 	}
 }
 
@@ -132,13 +178,26 @@ function makeBingo()
 {
 	var ccount = 0;
 	checkedlist = [];
-	for(i=0;i<numlist[maxlevel];i++)
+	if(rule=="1")
 	{
-		box = document.getElementById("checkbox" + i);
-		if(box.checked == true)
+		for(i=0;i<numlist1[maxlevel1];i++)
 		{
-			checkedlist.push(missionlist[i][0]);
-			ccount++;
+			box = document.getElementById("checkbox" + i);
+			if(box.checked == true)
+			{
+				checkedlist.push(missionlist1[i][0]);
+				ccount++;
+			}
+		}
+	} else {
+		for(i=0;i<numlist2[maxlevel2];i++)
+		{
+			box = document.getElementById("checkbox" + i);
+			if(box.checked == true)
+			{
+				checkedlist.push(missionlist2[i][0]);
+				ccount++;
+			}
 		}
 	}
 	var r = 0;
@@ -160,6 +219,10 @@ function makeBingo()
 				  [0,0,0,0,0,0,0,0],
 				  [0,0,0,0,0,0,0,0]];
 	makeTable();
+	rednum = 0;
+	bluenum = 0;
+	document.getElementById('rednum').innerHTML = "" + rednum;
+	document.getElementById('bluenum').innerHTML = "" + bluenum;
 }
 
 function clickTable(obj,i,j)
@@ -183,4 +246,15 @@ function clickTable(obj,i,j)
 	}
 	document.getElementById('rednum').innerHTML = "" + rednum;
 	document.getElementById('bluenum').innerHTML = "" + bluenum;
+}
+
+function changeList()
+{
+	if(rule=="1")
+	{
+		rule = "2";
+	} else {
+		rule = "1";
+	}
+	makeCheckList();
 }
