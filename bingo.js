@@ -32,7 +32,7 @@ var rednum = 0;
 var bluenum = 0;
 var table = document.createElement('table');
 table.border = "1px";
-table.style = "border-collapse: collapse; font-size: 10px";
+table.style = "border-collapse: collapse; font-size: 15px";
 makeTable();
 
 function getCSV(url){
@@ -98,7 +98,7 @@ function makeTable()
 			var td = document.createElement('td');
 		  	td.textContent = bingo[i][j];
 		  	if(i==0){td.height = "30px";}else{td.height = "80px";}
-		  	if(j==0){td.width = "30px";}else{td.width = "100px";}
+		  	if(j==0){td.width = "30px";}else{td.width = "150px";}
 		  	td.align = "center";
 			td.id = "td" + i + j;
 			if(i!=0&&j!=0){td.onclick = function(){clickTable(this)}}
