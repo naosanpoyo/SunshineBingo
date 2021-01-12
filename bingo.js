@@ -231,11 +231,11 @@ function clickTable(obj,i,j)
 	col = obj.id.charAt(3);
 	if(colors[row][col]==0)
 	{
-		obj.style.background = "#ffeeee";
+		obj.style.background = "#ffcccc";
 		colors[row][col] = 1;
 		rednum += 1;
 	} else if(colors[row][col]==1) {
-		obj.style.background = "#eeeeff";
+		obj.style.background = "#ccccff";
 		colors[row][col] = 2;
 		rednum -= 1;
 		bluenum += 1;
