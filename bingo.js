@@ -1,15 +1,20 @@
 var rule = "1"
 var numlist1 = [];
 var numlist2 = [];
+var numlist3 = [];
 var titlelist1 = [];
 var titlelist2 = [];
+var titlelist3 = [];
 var maxlevel1 = 8;
 var maxlevel2 = 11;
+var maxlevel3 = 3;
 url1 = "mission1.csv";
-url2 = "mission2.csv"
-var missionlist1, missionlist2
+url2 = "mission2.csv";
+url3 = "mission3.csv";
+var missionlist1, missionlist2, missionlist3;
 getCSV();
 var checkedlist = [];
+var highcheckedlist = [];
 makeCheckList(rule);
 var size = 5;
 var bingo = [[" ","1","2","3","4","5","6","7","8","9","10"],
@@ -89,6 +94,30 @@ function getCSV(url){
     res[i] = arr[i].split(',');
   }
   missionlist2 = res;
+	
+  var txt = new XMLHttpRequest();
+  txt.open('get', url3, false);
+  txt.send();
+  var arr = txt.responseText.split('\n');
+  for (var i=0;i<arr.length;)
+  {
+	  str = arr[i];
+	  if(str.charAt(0)=="#")
+	  {
+		  numlist3.push(i);
+		  titlelist3.push(arr[i]);
+		  arr.splice(i,1);
+	  }else{
+		  i++;
+	  }
+  }
+  numlist3.push(arr.length-1);
+  var res = [];
+  for(var i = 0; i < arr.length; i++){
+    if(arr[i] == '') break;
+    res[i] = arr[i].split(',');
+  }
+  missionlist3 = res;
 }
 
 function makeTable()
@@ -136,7 +165,7 @@ function makeCheckList()
 				}
 			}
 		}
-	} else {
+	} else if(rule=="2") {
 		str += "現在のリスト：クリア済みファイル用<br>"
 		for(var lv=1;lv<=maxlevel2;lv++)
 		{
@@ -148,6 +177,21 @@ function makeCheckList()
 					str += "<label><input type='checkbox' id='checkbox" + i + "' checked/>" + missionlist2[i][0] + "</label><br>";
 				} else {
 					str += "<label><input type='checkbox' id='checkbox" + i + "'/>" + missionlist2[i][0] + "</label><br>";
+				}
+			}
+		}
+	} else {
+		str += "現在のリスト：クリア済みファイル用(S人生オセロ)<br>"
+		for(var lv=1;lv<=maxlevel3;lv++)
+		{
+			str += "<br><b>" + titlelist3[lv-1].slice(2) + "</b><br><input type='button' value='すべてチェック' onclick='checkAll(" + lv + ",true);'/> <input type='button' value='すべて解除' onclick='checkAll(" + lv + ",false);'/><br>";
+			for(var i=numlist3[lv-1];i<numlist3[lv];i++)
+			{
+				if(lv<=3)
+				{
+					str += "<label><input type='checkbox' id='checkbox" + i + "' checked/>" + missionlist3[i][0] + "</label><br>";
+				} else {
+					str += "<label><input type='checkbox' id='checkbox" + i + "'/>" + missionlist3[i][0] + "</label><br>";
 				}
 			}
 		}
@@ -163,8 +207,13 @@ function checkAll(lv,tf)
 		{
 			document.getElementById("checkbox" + i).checked = tf;
 		}
-	} else {
+	} else if(rule=="2") {
 		for(var i=numlist2[lv-1];i<numlist2[lv];i++)
+		{
+			document.getElementById("checkbox" + i).checked = tf;
+		}
+	} else {
+		for(var i=numlist3[lv-1];i<numlist3[lv];i++)
 		{
 			document.getElementById("checkbox" + i).checked = tf;
 		}
@@ -184,6 +233,7 @@ function makeBingo()
 {
 	var ccount = 0;
 	checkedlist = [];
+	highchekedlist = [];
 	if(rule=="1")
 	{
 		for(i=0;i<numlist1[maxlevel1];i++)
@@ -195,7 +245,7 @@ function makeBingo()
 				ccount++;
 			}
 		}
-	} else {
+	} else if(rule=="2") {
 		for(i=0;i<numlist2[maxlevel2];i++)
 		{
 			box = document.getElementById("checkbox" + i);
@@ -205,15 +255,43 @@ function makeBingo()
 				ccount++;
 			}
 		}
+	} else {
+		for(i=0;i<numlist3[maxlevel3];i++)
+		{
+			if(i<numlist3[maxlevel3-1])
+			{
+				box = document.getElementById("checkbox" + i);
+				if(box.checked == true)
+				{
+					checkedlist.push(missionlist3[i][0]);
+					ccount++;
+				}
+			} else {
+				box = document.getElementById("checkbox" + i);
+				if(box.checked == true)
+				{
+					highcheckedlist.push(missionlist3[i][0]);
+					ccount++;
+				}
+			}
+		}
 	}
 	var r = 0;
 	for(i=1;i<=size;i++)
 	{
 		for(j=1;j<=size;j++)
 		{
-			r = Math.floor(Math.random()*checkedlist.length);
-			bingo[i][j] = checkedlist[r];
-			checkedlist.splice(r,1);
+			if(rule!="3"||(i>1&&i<size)||(j>1&&j<size))
+			{
+				r = Math.floor(Math.random()*checkedlist.length);
+				bingo[i][j] = checkedlist[r];
+				checkedlist.splice(r,1);
+			} else {
+				r = Math.floor(Math.random()*highcheckedlist.length);
+				bingo[i][j] = highcheckedlist[r];
+				highcheckedlist.splice(r,1);
+			}
+			
 		}
 	}
 	colors = [[0,0,0,0,0,0,0,0,0,0,0],
@@ -262,6 +340,8 @@ function changeList()
 	if(rule=="1")
 	{
 		rule = "2";
+	} else if(rule=="2"){
+		rule = "3";
 	} else {
 		rule = "1";
 	}
