@@ -11,8 +11,57 @@
 		<img src="minus.png" width="20px" onclick="chgSize(-1)"/>
 		<span id="sizetext";><font size="5">5x5</font></span>
 		<img src="plus.png" width="20px" onclick="chgSize(1)"/> 
-		<div><input type="button" value="作成" onclick="makeBingo();"/></div>
+		<div><input type="button" value="作成" id="makeBingo" onclick="makeBingo();"/><p id="timer">00:00</p></div>
 	 </div>
+	 <div class="timercontent">
+        
+    </div>
+    <script>
+        var point;
+        var sec;
+        var seconds;
+        var min;
+        var hour;
+        var start;
+        var now;
+        var time;
+        var id;
+
+        document.getElementById('makeBingo').addEventListener('click', function () {
+                start = new Date();
+                id = setInterval(goTimer, 10);
+        });
+
+        var goTimer = function () {
+            now = new Date();
+            time = now.getTime() - start.getTime();
+
+            point = Math.floor(time / 100);
+            sec = Math.floor(time / 1000);
+            min = Math.floor(sec / 60);
+            hour = Math.floor(min / 60);
+            seconds = Math.floor(time / 1000);
+
+            if (true) {
+                point = point - sec * 10;
+                sec = sec - min * 60;
+                min = min - hour * 60;
+
+                point = addZero(point);
+                sec = addZero(sec);
+                min = addZero(min);
+
+                document.getElementById('timer').innerHTML = min + ':' + sec;
+            }
+        }
+
+        var addZero = function (value) {
+            if (value < 10) {
+                value = '0' + value;
+            }
+            return value;
+        }
+    </script>
 	 <div onclick="obj=document.getElementById('open').style; obj.display=(obj.display=='none')?'block':'none';">
 	 <a style="cursor:pointer;"><font color="#4444FF">ルール説明(クリックで展開)</font></a>
     </div>
